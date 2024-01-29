@@ -6,7 +6,7 @@ from .models import ShortenUrlRequest, ShortenUrlResponse, URLID
 
 @post("/shorten")
 async def shorten(data: ShortenUrlRequest) -> ShortenUrlResponse:
-    ...    
+    ...
 
 
 @get("/{url_id}")

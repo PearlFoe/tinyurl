@@ -1,0 +1,14 @@
+[tool.ruff]
+select = ["E", "F", "B", "E", "W", "Q", "N", "D", "ANN", "C4", "SIM", "ARG"]
+ignore = ["E501", "D212", "D107", "D203", "ANN101"]
+unfixable = ["B"]
+
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["E402", "D104"]
+"**/{tests,docs,tools}/*" = ["E402", "D", "ANN"]
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
