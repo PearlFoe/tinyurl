@@ -1,3 +1,5 @@
+"""Routers for url shortening and resolving."""
+
 from litestar import get, post
 from litestar.response.redirect import Redirect
 
@@ -9,6 +11,6 @@ async def shorten(data: ShortenUrlRequest) -> ShortenUrlResponse:
     ...
 
 
-@get("/{url_id}")
+@get("/{url_id:int}")
 async def resolve(url_id: URLID) -> None:
     ...
