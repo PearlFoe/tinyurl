@@ -4,15 +4,16 @@ from typing import Annotated
 
 from litestar import get, post, Request
 from litestar.response.redirect import Redirect
-from litestar.params import Dependency
+from litestar.params import Dependency, Parameter
+from litestar.status_codes import HTTP_201_CREATED, HTTP_307_TEMPORARY_REDIRECT
 from dependency_injector.wiring import inject, Provide
 
-from .models import ShortenUrlRequest, ShortenUrlResponse, URLID
+from .models import ShortenUrlRequest, ShortenUrlResponse, URLID, URLID_PATTERN
 from .containers import Container
 from .url_handlers import URLHandler
 
 
-@post("/shorten")
+@post("/shorten", status_code=HTTP_201_CREATED)
 @inject
 async def shorten(
         request: Request,
@@ -33,12 +34,12 @@ async def shorten(
     return ShortenUrlResponse(url=short_url)
 
 
-@get("/{url_id:str}")
+@get("/{url_id:str}", status_code=HTTP_307_TEMPORARY_REDIRECT)
 @inject
 async def resolve(
-        url_id: URLID,
+        url_id: Annotated[URLID, Parameter(pattern=URLID_PATTERN)],
         url_handler: Annotated[URLHandler, Dependency(skip_validation=True)] = Provide[Container.url_handler],
-    ) -> None:
+    ) -> Redirect:
     """
     Redirect from short url to long version.
 
@@ -46,4 +47,4 @@ async def resolve(
     :return: Redirects to long url.
     """
     url = await url_handler.get_url(url_id)
-    return Redirect(url.long)
+    return Redirect(url.long, status_code=HTTP_307_TEMPORARY_REDIRECT)

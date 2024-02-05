@@ -4,7 +4,7 @@ from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
 from src.app import get_app
-from src.url.models import ShortenUrlRequest, ShortenUrlResponse, URL
+from src.url.models import URL, ShortenUrlRequest, ShortenUrlResponse
 from src.url.containers import Container
 from src.url.url_handlers import URLHandler
 
@@ -40,7 +40,7 @@ async def client(app: Litestar):
 @pytest.fixture(scope="function")
 def url():
     url = URL(
-        long="https://google.com/",
+        long="https://google.com",
     )
     url.generate_short_id()
     return url
@@ -86,4 +86,3 @@ def shoten_url_response(short_url: str):
 @pytest.fixture(scope="function")
 def shoten_url_response_dict(shoten_url_response: ShortenUrlResponse):
     return msgspec.to_builtins(shoten_url_response)
-
