@@ -27,5 +27,4 @@ COPY . .
 
 EXPOSE 8000
 
-# Run the application.
-CMD gunicorn "app:get_app()" --chdir src/ --bind localhost:8000 --worker-class uvicorn.workers.UvicornWorker
+CMD gunicorn "app:get_app()" --chdir src/ --bind 0.0.0.0:8000 --worker-class uvicorn.workers.UvicornWorker

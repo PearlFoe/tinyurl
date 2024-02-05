@@ -7,7 +7,7 @@ Stores all logic to setup application.
 from dependency_injector.containers import DeclarativeContainer
 from litestar import Litestar, Router
 
-from .url import resolve, get_container as url_get_container, get_router as url_get_router
+from src.url import resolve, get_container as url_get_container, get_router as url_get_router
 
 
 
