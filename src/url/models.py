@@ -28,7 +28,7 @@ class URL(Struct):
     """URL data model."""
 
     long: str
-    short: URLID | None
+    short: URLID | None = None
 
     def generate_short_id(self, length: int=URL_ID_LENGTH) -> None:
         """Generate random short url id of porvided length."""

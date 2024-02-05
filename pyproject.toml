@@ -1,6 +1,6 @@
 [tool.ruff]
 select = ["E", "F", "B", "E", "W", "Q", "N", "D", "ANN", "C4", "SIM", "ARG"]
-ignore = ["E501", "D212", "D107", "D203", "ANN101"]
+ignore = ["E501", "D212", "D107", "D203", "ANN101", "ANN204"]
 unfixable = ["B"]
 
 target-version = "py311"
@@ -12,3 +12,6 @@ line-length = 88
 
 [tool.ruff.flake8-quotes]
 docstring-quotes = "double"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

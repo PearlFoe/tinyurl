@@ -1,15 +1,15 @@
 """Routers for url shortening and resolving."""
-from typing import TYPE_CHECKING
+
+from typing import Annotated
 
 from litestar import get, post, Request
 from litestar.response.redirect import Redirect
+from litestar.params import Dependency
 from dependency_injector.wiring import inject, Provide
 
 from .models import ShortenUrlRequest, ShortenUrlResponse, URLID
 from .containers import Container
-
-if TYPE_CHECKING:
-    from .url_handlers import URLHandler
+from .url_handlers import URLHandler
 
 
 @post("/shorten")
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 async def shorten(
         request: Request,
         data: ShortenUrlRequest,
-        url_handler: URLHandler = Provide[Container.url_handler]
+        url_handler: Annotated[URLHandler, Dependency(skip_validation=True)] = Provide[Container.url_handler],
     ) -> ShortenUrlResponse:
     """
     Make short url from long.
@@ -34,9 +34,10 @@ async def shorten(
 
 
 @get("/{url_id:str}")
+@inject
 async def resolve(
         url_id: URLID,
-        url_handler: URLHandler = Provide[Container.url_handler]
+        url_handler: Annotated[URLHandler, Dependency(skip_validation=True)] = Provide[Container.url_handler],
     ) -> None:
     """
     Redirect from short url to long version.
