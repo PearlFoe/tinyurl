@@ -1,6 +1,50 @@
+version: '3.9'
+
 services:
   server:
     build:
       context: .
     ports:
       - 8000:8000
+    env_file:
+      - "secrest/.env"
+    depends_on:
+      - db
+      - cache
+
+  db:
+    image: postgres:16.1-alpine
+    hostname: db
+    restart: unless-stopped
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - "secrest/.env"
+
+  cache:
+    image: redis:7.2-alpine
+    hostname: cache
+    restart: unless-stopped
+    volumes:
+      - "cache-data:/var/lib/redis/data"
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - "secrest/.env"
+
+
+volumes:
+  db-data:
+  cache-data:
