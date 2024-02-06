@@ -2,18 +2,20 @@ version: '3.9'
 
 services:
   server:
+    container_name: tinyurl-app
     build:
       context: .
     ports:
       - 8000:8000
     env_file:
-      - "secrest/.env"
+      - "secrets/.env"
     depends_on:
       - db
       - cache
 
   db:
     image: postgres:16.1-alpine
+    container_name: tinyurl-psql
     hostname: db
     restart: unless-stopped
     volumes:
@@ -21,15 +23,16 @@ services:
     expose:
       - 5432
     healthcheck:
-      test: ["CMD", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       interval: 10s
       timeout: 5s
       retries: 5
     env_file:
-      - "secrest/.env"
+      - "secrets/.env"
 
   cache:
     image: redis:7.2-alpine
+    container_name: tinyurl-redis
     hostname: cache
     restart: unless-stopped
     volumes:
@@ -42,7 +45,7 @@ services:
       timeout: 5s
       retries: 5
     env_file:
-      - "secrest/.env"
+      - "secrets/.env"
 
 
 volumes:
