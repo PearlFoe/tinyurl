@@ -6,7 +6,7 @@ from typing import TypeAlias, Annotated
 
 from msgspec import Struct, Meta
 
-from .constants import URL_ID_LENGTH
+from ..constants import URL_ID_LENGTH
 
 
 

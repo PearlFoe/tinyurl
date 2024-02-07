@@ -2,7 +2,7 @@ from litestar.testing import TestClient
 from litestar import status_codes
 from httpx import Response
 
-from src.url.models import URL
+from src.url.models.routers import URL
 
 
 class TestShorteningLogic:

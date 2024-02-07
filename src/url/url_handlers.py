@@ -1,18 +1,19 @@
 """Handlers for url requests."""
-from .models import ShortenUrlRequest, URL, URLID
+from .models.routers import ShortenUrlRequest, URL, URLID
+from .storage.db import URLRepository
 
 
 class URLHandler:
     """Handler for url creatind and resolving logic."""
 
-    def __init__(self) -> None:
-        ...
+    def __init__(self, db: URLRepository) -> None:
+        self._db = db
 
     async def _save_url(self, url: URL) -> None:
-        ...
+        self._db.save_url(url)
 
     async def _get_url(self, short_url_id: URLID) -> URL:
-        ...
+        self._db.get_url(short_url_id)
 
     async def save_url(self, request_body: ShortenUrlRequest) -> URL:
         """

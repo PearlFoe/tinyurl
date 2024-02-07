@@ -4,9 +4,10 @@ from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
 from src.app import get_app
-from src.url.models import URL, ShortenUrlRequest, ShortenUrlResponse
+from src.url.models.routers import URL, ShortenUrlRequest, ShortenUrlResponse
 from src.url.containers import Container
 from src.url.url_handlers import URLHandler
+from src.url.storage.db import URLRepository
 
 
 @pytest.fixture(scope="function")
@@ -47,11 +48,18 @@ def url():
 
 
 @pytest.fixture(scope="function")
-def url_handler(url: URL):
+def url_db_repository():
+    return None
+
+
+@pytest.fixture(scope="function")
+def url_handler(url: URL, url_db_repository: URLRepository):
     async def mocked_func(*args, **kwargs):
         return url
 
-    handler = URLHandler()
+    handler = URLHandler(
+        db=url_db_repository
+    )
 
     handler.get_url = mocked_func
     handler.save_url = mocked_func

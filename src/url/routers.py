@@ -8,7 +8,7 @@ from litestar.params import Dependency, Parameter
 from litestar.status_codes import HTTP_201_CREATED, HTTP_307_TEMPORARY_REDIRECT
 from dependency_injector.wiring import inject, Provide
 
-from .models import ShortenUrlRequest, ShortenUrlResponse, URLID, URLID_PATTERN
+from .models.routers import ShortenUrlRequest, ShortenUrlResponse, URLID, URLID_PATTERN
 from .containers import Container
 from .url_handlers import URLHandler
 
