@@ -1,3 +1,5 @@
+import pytest
+
 from litestar.testing import TestClient
 from litestar import status_codes
 from httpx import Response
@@ -8,14 +10,22 @@ from src.url.models.routers import URL
 class TestShorteningLogic:
     async def test_shorten__success(
             self,
+            monkeypatch,
+            url: URL,
             client: TestClient,
             shoten_url_request_dict: dict,
             shoten_url_response_dict: dict
         ):
-        response: Response = await client.post(
-            "api/v1/url/shorten",
-            json=shoten_url_request_dict,
-        )
+        with monkeypatch.context() as context:
+            context.setattr(
+                "src.url.models.routers.random.choices",
+                lambda _, k: list(url.short)
+            )
+
+            response: Response = await client.post(
+                "api/v1/url/shorten",
+                json=shoten_url_request_dict,
+            )
         assert response.status_code == status_codes.HTTP_201_CREATED
         assert response.json() == shoten_url_response_dict
 

@@ -4,7 +4,7 @@ from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
 from src.app import get_app
-from src.url.models.routers import URL, ShortenUrlRequest, ShortenUrlResponse
+from src.url.models.routers import URL, URLID, ShortenUrlRequest, ShortenUrlResponse
 from src.url.containers import Container
 from src.url.url_handlers import URLHandler
 from src.url.storage.db import URLRepository
@@ -48,21 +48,27 @@ def url():
 
 
 @pytest.fixture(scope="function")
-def url_db_repository():
-    return None
+def url_db_repository_mock():
+    class URLRepositoryMock:
+        def __init__(self) -> None:
+            self._data: dict[URLID, URL] = {}
+
+        async def save_url(self, url: URL) -> None:
+            self._data[url.short] = url
+
+        async def get_url(self, short_url_id: URLID) -> URL:
+            return self._data[short_url_id]
+
+    return URLRepositoryMock()
 
 
 @pytest.fixture(scope="function")
-def url_handler(url: URL, url_db_repository: URLRepository):
-    async def mocked_func(*args, **kwargs):
-        return url
-
+def url_handler(url: URL, url_db_repository_mock: URLRepository):
     handler = URLHandler(
-        db=url_db_repository
+        db=url_db_repository_mock
     )
 
-    handler.get_url = mocked_func
-    handler.save_url = mocked_func
+    handler._db._data[url.short] = url
 
     return handler
 

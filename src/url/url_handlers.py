@@ -10,10 +10,10 @@ class URLHandler:
         self._db = db
 
     async def _save_url(self, url: URL) -> None:
-        self._db.save_url(url)
+        await self._db.save_url(url)
 
     async def _get_url(self, short_url_id: URLID) -> URL:
-        self._db.get_url(short_url_id)
+        return await self._db.get_url(short_url_id)
 
     async def save_url(self, request_body: ShortenUrlRequest) -> URL:
         """
