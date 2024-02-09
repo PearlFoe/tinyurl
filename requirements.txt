@@ -1,4 +1,7 @@
+aiosql==9.4
 anyio==4.2.0
+async-timeout==4.0.3
+asyncpg==0.29.0
 certifi==2023.11.17
 click==8.1.7
 dependency-injector==4.41.0
@@ -22,6 +25,7 @@ pytest==7.4.4
 pytest-asyncio==0.23.4
 python-dateutil==2.8.2
 PyYAML==6.0.1
+redis==5.0.1
 rich==13.7.0
 rich-click==1.7.3
 ruff==0.1.14

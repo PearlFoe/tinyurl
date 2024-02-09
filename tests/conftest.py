@@ -9,7 +9,7 @@ from src.url.containers import Container
 from src.url.url_handlers import URLHandler
 from src.url.storage.db import URLRepository
 
-from .mocks.url_routers import URLRepositoryMock
+from .mocks.url_repositories import URLRepositoryMock, URLCacheRepositoryMock
 
 
 @pytest.fixture(scope="function")
@@ -55,9 +55,18 @@ def url_db_repository_mock():
 
 
 @pytest.fixture(scope="function")
-def url_handler(url_db_repository_mock: URLRepository):
+def url_cache_repository_mock():
+    return URLCacheRepositoryMock()
+
+
+@pytest.fixture(scope="function")
+def url_handler(
+        url_db_repository_mock: URLRepositoryMock,
+        url_cache_repository_mock: URLCacheRepositoryMock
+    ):
     handler = URLHandler(
-        db=url_db_repository_mock
+        db=url_db_repository_mock,
+        cache=url_cache_repository_mock,
     )
     return handler
 

@@ -1,5 +1,5 @@
 """Module for caching logic."""
-import aioredis
+import redis
 
 from ..models.routers import URL, URLID
 
@@ -9,7 +9,7 @@ class URLCacheRepository:
 
     def __init__(
             self,
-            pool: aioredis.ConnectionPool,
+            pool: redis.asyncio.ConnectionPool,
             key_prefix: str = "url",
             default_ttl_sec: float = 60*60*24,
         ):
@@ -28,7 +28,7 @@ class URLCacheRepository:
         :param ttl: Time (seconds) url to be stored cache. Default: -1.
                     If nothing is set, configured default value is used.
         """
-        async with aioredis.Redis(pool=self._pool) as connection:
+        async with redis.asyncio.Redis(pool=self._pool) as connection:
             connection.setex(
                 name=self._format_key(url.short),
                 value=url.long,
@@ -42,7 +42,7 @@ class URLCacheRepository:
         :param short_url_id: Short url id.
         :return: Url info from cache.
         """
-        async with aioredis.Redis(pool=self._pool) as connection:
+        async with redis.asyncio.Redis(pool=self._pool) as connection:
             long_url = connection.get(self._format_key(short_url_id))
 
         if not long_url:

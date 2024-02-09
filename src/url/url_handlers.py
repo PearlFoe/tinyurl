@@ -1,19 +1,29 @@
 """Handlers for url requests."""
 from .models.routers import ShortenUrlRequest, URL, URLID
 from .storage.db import URLRepository
+from .storage.cache import URLCacheRepository
 
 
 class URLHandler:
     """Handler for url creatind and resolving logic."""
 
-    def __init__(self, db: URLRepository) -> None:
+    def __init__(self, db: URLRepository, cache: URLCacheRepository) -> None:
         self._db = db
+        self._cache = cache
 
     async def _save_url(self, url: URL) -> None:
         await self._db.save_url(url)
 
     async def _get_url(self, short_url_id: URLID) -> URL | None:
-        return await self._db.get_url(short_url_id)
+        cached_url = await self._cache.get_url(short_url_id)
+        if cached_url:
+            return cached_url
+
+        url = await self._db.get_url(short_url_id)
+        if url:
+            await self._cache.save_url(url)
+
+        return url
 
     async def save_url(self, request_body: ShortenUrlRequest) -> URL:
         """
@@ -32,6 +42,10 @@ class URLHandler:
     async def get_url(self, short_url_id: URLID) -> URL | None:
         """
         Get url from storage.
+
+        Lasy caching implemented. If url is cached
+        it would be returned. Otherwise it would be selected
+        from db and cached.
 
         :param short_url_id: Short url id from path.
         :return: URL object with full id.
