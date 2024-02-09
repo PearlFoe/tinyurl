@@ -2,7 +2,7 @@
 
 from typing import Annotated
 
-from litestar import get, post, Request
+from litestar import get, post, Request, exceptions
 from litestar.response.redirect import Redirect
 from litestar.params import Dependency, Parameter
 from litestar.status_codes import HTTP_201_CREATED, HTTP_307_TEMPORARY_REDIRECT
@@ -26,6 +26,7 @@ async def shorten(
     :param data: Request body with long url.
     :return: Response body with short version of long url.
     """
+    print(id(url_handler))
     url = await url_handler.save_url(data)
 
     request_url = request.url
@@ -47,4 +48,6 @@ async def resolve(
     :return: Redirects to long url.
     """
     url = await url_handler.get_url(url_id)
+    if not url:
+        raise exceptions.NotFoundException()
     return Redirect(url.long, status_code=HTTP_307_TEMPORARY_REDIRECT)

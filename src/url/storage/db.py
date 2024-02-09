@@ -25,7 +25,7 @@ class URLRepository:
                 short_url=url.short,
             )
 
-    async def get_url(self, short_url_id: URLID) -> URL:
+    async def get_url(self, short_url_id: URLID) -> URL | None:
         """
         Get url from database.
 
@@ -37,5 +37,8 @@ class URLRepository:
                 connection=connection,
                 short_url=short_url_id,
             )
+
+        if not long_url:
+            return None
 
         return URL(long=long_url, short=short_url_id)

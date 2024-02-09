@@ -12,7 +12,7 @@ class URLHandler:
     async def _save_url(self, url: URL) -> None:
         await self._db.save_url(url)
 
-    async def _get_url(self, short_url_id: URLID) -> URL:
+    async def _get_url(self, short_url_id: URLID) -> URL | None:
         return await self._db.get_url(short_url_id)
 
     async def save_url(self, request_body: ShortenUrlRequest) -> URL:
@@ -29,7 +29,7 @@ class URLHandler:
 
         return url
 
-    async def get_url(self, short_url_id: URLID) -> URL:
+    async def get_url(self, short_url_id: URLID) -> URL | None:
         """
         Get url from storage.
 
