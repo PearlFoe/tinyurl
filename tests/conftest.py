@@ -55,7 +55,7 @@ def url_db_repository_mock():
 
 
 @pytest.fixture(scope="function")
-def url_handler(url: URL, url_db_repository_mock: URLRepository):
+def url_handler(url_db_repository_mock: URLRepository):
     handler = URLHandler(
         db=url_db_repository_mock
     )

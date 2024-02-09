@@ -1,4 +1,3 @@
-from dependency_injector.wiring import inject, Provide
 from litestar.testing import TestClient
 from litestar import status_codes
 from httpx import Response
@@ -8,7 +7,6 @@ from src.url.url_handlers import URLHandler
 
 
 class TestShorteningLogic:
-    @inject
     async def test_shorten__success(
             self,
             monkeypatch,

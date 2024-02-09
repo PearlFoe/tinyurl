@@ -1,5 +1,5 @@
 from src.url.url_handlers import URLHandler
-from src.url.models.routers import URL, URLID, ShortenUrlRequest
+from src.url.models.routers import URL, ShortenUrlRequest
 
 # TODO: test db errors processing
 
