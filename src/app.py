@@ -10,7 +10,6 @@ from litestar import Litestar, Router
 from src.url import resolve, get_container as url_get_container, get_router as url_get_router
 
 
-
 class ExtendedLitestar(Litestar):
     """Extended application class for working with DI containers."""
 

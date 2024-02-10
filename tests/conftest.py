@@ -6,10 +6,12 @@ from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
 from src.app import get_app
+from src.url.settings import Settings
 from src.url.models.routers import URL, ShortenUrlRequest, ShortenUrlResponse
 from src.url.containers import Container
 from src.url.url_handlers import URLHandler
 from src.url.storage.db import URLRepository
+
 
 from .mocks.url_repositories import URLRepositoryMock, URLCacheRepositoryMock
 
@@ -20,7 +22,9 @@ os.environ.setdefault("ENV", "test")  # use .env.test file for project configura
 @pytest.fixture(scope="function")
 def url_container(url_handler: URLHandler):
     container = Container()
+    settings = Settings()
 
+    container.env.from_dict(settings.model_dump())
     container.url_handler.override(url_handler)
 
     return container
