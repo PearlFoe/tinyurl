@@ -11,7 +11,7 @@ class Settings(BaseSettings):
 
     class _EnvType(StrEnum):
         TEST = "test"
-        PROD = "PROD"
+        PROD = "prod"
 
     env: _EnvType = "test"
 
