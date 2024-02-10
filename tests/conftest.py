@@ -1,3 +1,5 @@
+import os
+
 import msgspec
 import pytest
 from litestar import Litestar
@@ -10,6 +12,9 @@ from src.url.url_handlers import URLHandler
 from src.url.storage.db import URLRepository
 
 from .mocks.url_repositories import URLRepositoryMock, URLCacheRepositoryMock
+
+
+os.environ.setdefault("ENV", "test")  # use .env.test file for project configuration
 
 
 @pytest.fixture(scope="function")
