@@ -29,5 +29,3 @@ EXPOSE 8000
 
 # use .env.prod file for project configuration
 ENV ENV="prod"   
-
-CMD gunicorn "app:get_app()" --chdir src/ --bind 0.0.0.0:8000 --worker-class uvicorn.workers.UvicornWorker

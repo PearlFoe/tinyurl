@@ -5,7 +5,7 @@ import pytest
 from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
-from src.app import get_app
+from src.main import get_app
 from src.url.settings import Settings
 from src.url.models.routers import URL, ShortenUrlRequest, ShortenUrlResponse
 from src.url.containers import Container
