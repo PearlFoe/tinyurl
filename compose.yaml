@@ -11,8 +11,10 @@ services:
     env_file:
       - "secrets/.env.prod"
     depends_on:
-      - db
-      - cache
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
 
   db:
     image: postgres:16.1-alpine
