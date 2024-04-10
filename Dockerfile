@@ -26,6 +26,3 @@ USER appuser
 COPY . .
 
 EXPOSE 8000
-
-# use .env.prod file for project configuration
-ENV ENV="prod"   

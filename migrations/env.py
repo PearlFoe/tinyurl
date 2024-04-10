@@ -12,7 +12,7 @@ from alembic import context
 
 
 config = context.config
-dotenv.load_dotenv("secrets/.env.prod")
+dotenv.load_dotenv("secrets/.env")
 dbt_dsn = os.getenv("DB_DSN")
 config.set_main_option("sqlalchemy.url", dbt_dsn)
 
