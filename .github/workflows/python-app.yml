@@ -32,7 +32,11 @@ jobs:
         python -m pip install -r requirements.txt
     - name: Setup .env file
       run: |
+        echo "!!!!!!!! DEBUG:"
+        echo $ENV_FILE_CONTENT
+        echo ${{ vars.ENV_FILE_CONTENT }}
         echo $ENV_FILE_CONTENT > secrets/.env
+        cat  secrets/.env
     - name: Lint with ruff
       run: |
         ruff check src/
