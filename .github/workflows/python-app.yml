@@ -35,6 +35,7 @@ jobs:
         echo "!!!!!!!! DEBUG:"
         echo $ENV_FILE_CONTENT
         echo ${{ vars.ENV_FILE_CONTENT }}
+        echo ${{ env.ENV_FILE_CONTENT }}
         echo ${{ env.ENV_FILE }}
         echo ${{ env.ENV_FILE }} > secrets/.env
         cat  secrets/.env
