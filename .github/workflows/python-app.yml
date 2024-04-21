@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
+      ENV_FILE_CONTENT: ${{ vars.ENV_FILE_CONTENT }}
 
     steps:
     - uses: actions/checkout@v3
@@ -32,7 +32,6 @@ jobs:
         python -m pip install -r requirements.txt
     - name: Setup .env file
       run: |
-        echo $ENV_FILE_CONTENT
         echo $ENV_FILE_CONTENT > ${{ github.workspace }}/secrets/.env
     - name: Lint with ruff
       run: |
