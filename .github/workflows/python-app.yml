@@ -33,7 +33,7 @@ jobs:
     - name: Setup .env file
       run: |
         echo $ENV_FILE_CONTENT
-        echo $ENV_FILE_CONTENT > secrets/.env
+        echo $ENV_FILE_CONTENT > ${{ github.workspace }}/secrets/.env
     - name: Lint with ruff
       run: |
         ruff check src/
