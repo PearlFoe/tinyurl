@@ -16,6 +16,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    
+    environment: 
+      name: .env
 
     env:
       ENV_FILE: ${{ vars.ENV_FILE_CONTENT }}
