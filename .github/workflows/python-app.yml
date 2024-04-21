@@ -32,7 +32,7 @@ jobs:
         python -m pip install -r requirements.txt
     - name: Setup .env file
       run: |
-        echo $ENV_FILE_CONTENT > ${{ github.workspace }}/secrets/.env
+        echo $ENV_FILE_CONTENT > secrets/.env
     - name: Lint with ruff
       run: |
         ruff check src/
