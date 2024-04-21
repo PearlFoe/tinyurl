@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ENV_FILE_CONTENT: ${{ vars.ENV_FILE_CONTENT }}
+      ENV_FILE: ${{ vars.ENV_FILE_CONTENT }}
 
     steps:
     - uses: actions/checkout@v3
@@ -35,7 +35,8 @@ jobs:
         echo "!!!!!!!! DEBUG:"
         echo $ENV_FILE_CONTENT
         echo ${{ vars.ENV_FILE_CONTENT }}
-        echo ${{ env.ENV_FILE_CONTENT }} > secrets/.env
+        echo ${{ env.ENV_FILE }}
+        echo ${{ env.ENV_FILE }} > secrets/.env
         cat  secrets/.env
     - name: Lint with ruff
       run: |
