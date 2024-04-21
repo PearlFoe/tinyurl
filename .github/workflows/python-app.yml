@@ -31,7 +31,9 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         python -m pip install -r requirements.txt
     - name: Setup .env file
-      run: echo $ENV_FILE_CONTENT > secrets/.env
+      run: |
+        echo $ENV_FILE_CONTENT
+        echo $ENV_FILE_CONTENT > secrets/.env
     - name: Lint with ruff
       run: |
         ruff check src/
