@@ -5,26 +5,28 @@ from litestar.testing import AsyncTestClient
 
 from src.main import get_app
 from src.url.settings import Settings
-from src.url.models.routers import URL, ShortenUrlRequest, ShortenUrlResponse
-from src.url.containers import Container
-from src.url.url_handlers import URLHandler
+from src.url.models.routers import ShortenUrlRequest, ShortenUrlResponse
+from src.url.models.urls import URL
+from src.url.containers import URLContainer
+from src.url.services.url_handlers import URLHandler
 
 from .mocks.url_repositories import URLRepositoryMock, URLCacheRepositoryMock
 
 
 @pytest.fixture(scope="function")
-def url_container(url_handler: URLHandler):
-    container = Container()
+def url_container():
+    container = URLContainer()
     settings = Settings()
 
     container.env.from_dict(settings.model_dump())
-    container.url_handler.override(url_handler)
+    container.db_repository.override(URLRepositoryMock())
+    container.cache_repository.override(URLCacheRepositoryMock())
 
     return container
 
 
 @pytest.fixture(scope="function")
-def containers(url_container: Container):
+def containers(url_container: URLContainer):
     return (
         url_container,
     )
@@ -63,14 +65,9 @@ def url_cache_repository_mock():
 
 @pytest.fixture(scope="function")
 def url_handler(
-        url_db_repository_mock: URLRepositoryMock,
-        url_cache_repository_mock: URLCacheRepositoryMock
+        url_container: URLContainer, 
     ):
-    handler = URLHandler(
-        db=url_db_repository_mock,
-        cache=url_cache_repository_mock,
-    )
-    return handler
+    return url_container.url_handler()
 
 
 @pytest.fixture(scope="function")

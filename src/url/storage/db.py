@@ -1,7 +1,7 @@
 """Module for db repositories."""
 import asyncpg
 
-from ..models.routers import URL, URLID
+from ..models.urls import URL, URLID
 from .queries.query_builders import Queries
 
 
