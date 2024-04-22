@@ -1,6 +1,6 @@
 [tool.ruff]
 target-version = "py311"
-line-length = 88
+line-length = 110
 exclude = [
     "migrations",
     "tests",
@@ -11,7 +11,7 @@ exclude = [
 
 [tool.ruff.lint]
 select = ["E", "F", "B", "E", "W", "Q", "N", "D", "ANN", "C4", "SIM", "ARG"]
-ignore = ["E501", "D212", "D107", "D203", "ANN101", "ANN204"]
+ignore = ["D212", "D107", "D203", "ANN101", "ANN204"]
 unfixable = ["B"]
 
 [tool.ruff.lint.per-file-ignores]
