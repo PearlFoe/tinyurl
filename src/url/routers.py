@@ -5,7 +5,7 @@ from typing import Annotated
 from litestar import get, post, Request, exceptions
 from litestar.response.redirect import Redirect
 from litestar.params import Dependency, Parameter
-from litestar.status_codes import HTTP_201_CREATED, HTTP_307_TEMPORARY_REDIRECT
+from litestar.status_codes import HTTP_201_CREATED, HTTP_303_SEE_OTHER
 from dependency_injector.wiring import inject, Provide
 
 from .models.routers import ShortenUrlRequest, ShortenUrlResponse, URLID, URLID_PATTERN
@@ -35,7 +35,7 @@ async def shorten(
     return ShortenUrlResponse(url=short_url)
 
 
-@get("/{url_id:str}", status_code=HTTP_307_TEMPORARY_REDIRECT)
+@get("/{url_id:str}", status_code=HTTP_303_SEE_OTHER)
 @inject
 async def resolve(
         url_id: Annotated[URLID, Parameter(pattern=URLID_PATTERN)],
@@ -50,4 +50,4 @@ async def resolve(
     url = await url_handler.get_url(url_id)
     if not url:
         raise exceptions.NotFoundException()
-    return Redirect(url.long, status_code=HTTP_307_TEMPORARY_REDIRECT)
+    return Redirect(url.long, status_code=HTTP_303_SEE_OTHER)
