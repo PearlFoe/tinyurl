@@ -1,7 +1,7 @@
 """Module for caching logic."""
 import redis
 
-from ..models.routers import URL, URLID
+from ..models.urls import URL, URLID
 
 
 class URLCacheRepository:

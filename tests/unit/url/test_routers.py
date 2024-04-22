@@ -2,8 +2,8 @@ from litestar.testing import TestClient
 from litestar import status_codes
 from httpx import Response
 
-from src.url.models.routers import URL
-from src.url.url_handlers import URLHandler
+from src.url.models.urls import URL
+from src.url.services.url_handlers import URLHandler
 
 
 class TestShorteningLogic:
@@ -17,7 +17,7 @@ class TestShorteningLogic:
         ):
         with monkeypatch.context() as context:
             context.setattr(
-                "src.url.models.routers.random.choices",
+                "src.url.models.urls.random.choices",
                 lambda _, k: list(url.short)
             )
 
@@ -55,7 +55,7 @@ class TestResolveLogic:
             url: URL,
             url_handler: URLHandler,
         ):
-        url_handler._db.data[url.short] = url
+        url_handler._url_storage._db.data[url.short] = url
         response: Response = await client.get(
             str(url.short),
             follow_redirects=False,

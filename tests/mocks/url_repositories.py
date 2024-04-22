@@ -1,4 +1,4 @@
-from src.url.models.routers import URL, URLID
+from src.url.models.urls import URL, URLID
 
 
 class URLRepositoryMock:

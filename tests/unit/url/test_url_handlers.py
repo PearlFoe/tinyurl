@@ -1,5 +1,6 @@
-from src.url.url_handlers import URLHandler
-from src.url.models.routers import URL, ShortenUrlRequest
+from src.url.services.url_handlers import URLHandler
+from src.url.models.routers import ShortenUrlRequest
+from src.url.models.urls import URL
 
 # TODO: test db errors processing
 
@@ -13,13 +14,13 @@ class TestURLHandler:
         ):
         with monkeypatch.context() as context:
             context.setattr(
-                "src.url.models.routers.random.choices",
+                "src.url.models.urls.random.choices",
                 lambda _, k: list(url.short)
             )
 
             await url_handler.save_url(shoten_url_request)
 
-            assert url.short in url_handler._db.data
+            assert url.short in url_handler._url_storage._db.data
 
     async def test_save_url__new_url_id_generates(
             self,
@@ -36,7 +37,7 @@ class TestURLHandler:
             url_handler: URLHandler,
             url: URL,
         ):
-        url_handler._db.data[url.short] = url
+        url_handler._url_storage._db.data[url.short] = url
         saved_url = await url_handler.get_url(url.short)
         assert saved_url == url
 

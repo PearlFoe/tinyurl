@@ -3,7 +3,7 @@ import aiosql
 from aiosql.queries import Queries as AiosqlQueries
 from asyncpg import Connection
 
-from src.url.models.routers import URLID
+from src.url.models.urls import URLID
 
 class Queries:
     """

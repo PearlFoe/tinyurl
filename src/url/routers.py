@@ -8,9 +8,10 @@ from litestar.params import Dependency, Parameter
 from litestar.status_codes import HTTP_201_CREATED, HTTP_303_SEE_OTHER
 from dependency_injector.wiring import inject, Provide
 
-from .models.routers import ShortenUrlRequest, ShortenUrlResponse, URLID, URLID_PATTERN
-from .containers import Container
-from .url_handlers import URLHandler
+from .models.routers import ShortenUrlRequest, ShortenUrlResponse
+from .models.urls import URLID, URLID_PATTERN
+from .containers import URLContainer
+from .services.url_handlers import URLHandler
 
 
 @post("/shorten", status_code=HTTP_201_CREATED)
@@ -18,7 +19,8 @@ from .url_handlers import URLHandler
 async def shorten(
         request: Request,
         data: ShortenUrlRequest,
-        url_handler: Annotated[URLHandler, Dependency(skip_validation=True)] = Provide[Container.url_handler],
+        url_handler: Annotated[
+            URLHandler, Dependency(skip_validation=True)] = Provide[URLContainer.url_handler],
     ) -> ShortenUrlResponse:
     """
     Make short url from long.
@@ -39,7 +41,8 @@ async def shorten(
 @inject
 async def resolve(
         url_id: Annotated[URLID, Parameter(pattern=URLID_PATTERN)],
-        url_handler: Annotated[URLHandler, Dependency(skip_validation=True)] = Provide[Container.url_handler],
+        url_handler: Annotated[
+            URLHandler, Dependency(skip_validation=True)] = Provide[URLContainer.url_handler],
     ) -> Redirect:
     """
     Redirect from short url to long version.

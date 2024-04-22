@@ -2,12 +2,13 @@
 
 from dependency_injector import containers, providers
 
-from .url_handlers import URLHandler
+from .services.url_handlers import URLHandler
+from .services.storage import URLStorage
 from .storage.db import URLRepository
 from .storage.cache import URLCacheRepository
 from .storage import utils
 
-class Container(containers.DeclarativeContainer):
+class URLContainer(containers.DeclarativeContainer):
     """Handle all dependencies for url processing."""
 
     wiring_config = containers.WiringConfiguration(
@@ -32,8 +33,13 @@ class Container(containers.DeclarativeContainer):
 
     cache_repository = providers.Factory(URLCacheRepository)
 
-    url_handler = providers.Factory(
-        URLHandler,
+    url_storage = providers.Factory(
+        URLStorage,
         db=db_repository,
         cache=cache_repository,
+    )
+
+    url_handler = providers.Factory(
+        URLHandler,
+        storage=url_storage,
     )
