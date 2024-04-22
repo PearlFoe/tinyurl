@@ -60,7 +60,7 @@ class TestResolveLogic:
             str(url.short),
             follow_redirects=False,
         )
-        assert response.status_code == status_codes.HTTP_307_TEMPORARY_REDIRECT
+        assert response.status_code == status_codes.HTTP_303_SEE_OTHER
 
     async def test_resolve__url_doesnt_exist(
             self,
