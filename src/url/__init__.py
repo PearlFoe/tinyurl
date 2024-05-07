@@ -3,12 +3,13 @@ from litestar import Router
 #  Router "resolve" needs to be imported here to register it in root router separately
 from .routers import shorten, resolve  # noqa
 from .containers import URLContainer
-from .settings import Settings
+from .settings import URLSettings
+
 
 def get_container() -> URLContainer:
     """Dependency container factory."""
     container = URLContainer()
-    settings = Settings()
+    settings = URLSettings()
 
     container.env.from_dict(settings.model_dump())
 

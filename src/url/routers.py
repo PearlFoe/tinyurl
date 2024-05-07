@@ -28,7 +28,6 @@ async def shorten(
     :param data: Request body with long url.
     :return: Response body with short version of long url.
     """
-    print(id(url_handler))
     url = await url_handler.save_url(data)
 
     request_url = request.url

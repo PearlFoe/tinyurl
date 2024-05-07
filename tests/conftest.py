@@ -4,7 +4,7 @@ from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
 from src.main import get_app
-from src.url.settings import Settings
+from src.url.settings import URLSettings
 from src.url.models.routers import ShortenUrlRequest, ShortenUrlResponse
 from src.url.models.urls import URL
 from src.url.containers import URLContainer
@@ -16,7 +16,7 @@ from .mocks.url_repositories import URLRepositoryMock, URLCacheRepositoryMock
 @pytest.fixture(scope="function")
 def url_container():
     container = URLContainer()
-    settings = Settings()
+    settings = URLSettings()
 
     container.env.from_dict(settings.model_dump())
     container.db_repository.override(URLRepositoryMock())

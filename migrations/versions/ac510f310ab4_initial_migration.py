@@ -25,7 +25,6 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("login", sa.String(), nullable=False),
         sa.Column("password", sa.String(), nullable=False),
-        sa.Column("username", sa.String(), nullable=False),
         sa.Column(
             "created",
             sa.TIMESTAMP(),

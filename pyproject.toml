@@ -11,7 +11,7 @@ exclude = [
 
 [tool.ruff.lint]
 select = ["E", "F", "B", "E", "W", "Q", "N", "D", "ANN", "C4", "SIM", "ARG"]
-ignore = ["D212", "D107", "D203", "ANN101", "ANN204"]
+ignore = ["D212", "D107", "D203", "ANN101", "ANN204", "D105"]
 unfixable = ["B"]
 
 [tool.ruff.lint.per-file-ignores]
