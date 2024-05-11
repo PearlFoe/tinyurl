@@ -8,7 +8,7 @@ from .validators import Email
 class User(Struct):
     """User data model."""
 
-    login: Email
+    login: str
     password_hash: str
     user_id: int | None = None
 

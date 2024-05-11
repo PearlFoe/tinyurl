@@ -1,7 +1,9 @@
 """Module for custom types validators."""
-
+from typing import Any
 from email_validator import validate_email, EmailNotValidError, ValidatedEmail
 from msgspec import ValidationError
+
+
 
 
 class Email(str):
@@ -15,8 +17,22 @@ class Email(str):
         except EmailNotValidError as e:
             raise ValidationError from e
 
-    def __str__(self) -> str:  # n
+    def __str__(self) -> str:
         return self._value.normalized
 
     def __repr__(self) -> str:
         return self._value.__repr__()
+
+
+def enc_hook(v: Any) -> Any:  # noqa
+    """
+    Encode custom types into supported by msgspec types.
+
+    :param v: Unsupported type value.
+    :raise NotImplementedError: Raises error if it's unexpected data type.
+    :return: _description_.
+    """
+    if isinstance(v, Email):
+        return str(v)
+    else:
+        raise NotImplementedError(v)

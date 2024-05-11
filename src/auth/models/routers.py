@@ -13,8 +13,8 @@ from .validators import Email
 class UserAuthRequest(Struct):
     """Login and registration request body model."""
 
-    login: Email
-    password: Annotated[str, Meta(ge=8, le=32)]
+    login: str
+    password: Annotated[str, Meta(pattern=r".{8,32}$")]
 
     def __post_init__(self):
         """Validate fields in after init."""

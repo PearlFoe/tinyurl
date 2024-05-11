@@ -18,7 +18,7 @@ from .services.auth_handler import AuthHandler
 async def login(
         data: UserAuthRequest,
         auth_handler: Annotated[
-            AuthHandler, Dependency(skip_validation=True)] = Provide[AuthContainer.auth_handler],
+           AuthHandler, Dependency(skip_validation=True)] = Provide[AuthContainer.auth_handler],
     ) -> UserAuthResponse:
     """
     Login user.

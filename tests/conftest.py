@@ -4,6 +4,12 @@ from litestar import Litestar
 from litestar.testing import AsyncTestClient
 
 from src.main import get_app
+
+from src.auth.settings import AuthSettings
+from src.auth.models.validators import enc_hook
+from src.auth.models.routers import UserAuthRequest, UserAuthResponse
+from src.auth.containers import AuthContainer
+
 from src.url.settings import URLSettings
 from src.url.models.routers import ShortenUrlRequest, ShortenUrlResponse
 from src.url.models.urls import URL
@@ -26,8 +32,22 @@ def url_container():
 
 
 @pytest.fixture(scope="function")
-def containers(url_container: URLContainer):
+def auth_container():
+    container = AuthContainer()
+    settings = AuthSettings()
+
+    container.env.from_dict(settings.model_dump())
+    
+    return container
+
+
+@pytest.fixture(scope="function")
+def containers(
+        auth_container: AuthContainer,
+        url_container: URLContainer,
+    ):
     return (
+        auth_container,
         url_container,
     )
 
@@ -35,6 +55,7 @@ def containers(url_container: URLContainer):
 @pytest.fixture(scope="function")
 def app(containers: tuple):
     app = get_app(containers)
+    app.debug = True
     return app
 
 
@@ -44,6 +65,19 @@ async def client(app: Litestar):
         yield client
 
 
+@pytest.fixture(scope="function")
+def auth_request():
+    return UserAuthRequest(
+        login="test@gmail.com", 
+        password="password"
+    )
+
+
+@pytest.fixture(scope="function")
+def auth_request_dict(auth_request: UserAuthRequest):
+    return msgspec.to_builtins(auth_request, enc_hook=enc_hook)
+    
+    
 @pytest.fixture(scope="function")
 def url():
     url = URL(

@@ -9,24 +9,26 @@ class AuthHandler:
     def __init__(self) -> None:
         pass
 
-    async def login(self, data: UserAuthRequest) -> UserAuthResponse:
+    async def login(self, _: UserAuthRequest) -> UserAuthResponse:
         """
         Login user.
 
         :param data: User login data.
         :return: Response body with login result.
         """
-        ...
+        return {}
 
-    async def registration(self, data: UserAuthRequest) -> UserAuthResponse:
+    async def registration(self, _: UserAuthRequest) -> UserAuthResponse:
         """
         Register user.
 
         :param data: User registration data.
         :return: Response body with registration result.
         """
-        ...
+        return {}
+
 
     async def logout(self) -> None:
         """Logout user."""
-        ...
+        return None
+

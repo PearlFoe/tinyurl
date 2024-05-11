@@ -8,7 +8,7 @@ from dependency_injector.containers import DeclarativeContainer
 from litestar import Litestar, Router
 
 from src.url import resolve, get_container as url_get_container, get_router as url_get_router
-
+from src.auth import get_container as auth_get_container, get_router as auth_get_router
 
 class ExtendedLitestar(Litestar):
     """Extended application class for working with DI containers."""
@@ -25,6 +25,7 @@ def _get_api_router() -> Router:
     router = Router(
         path="/api/v1",
         route_handlers=[
+            auth_get_router(),
             url_get_router(),
         ]
     )
@@ -34,6 +35,7 @@ def _get_api_router() -> Router:
 def get_app(containers: tuple[DeclarativeContainer] = ()) -> Litestar:
     """Create main app with all routers included."""
     containers = containers or (
+        auth_get_container(),
         url_get_container(),
     )
     app = ExtendedLitestar()

@@ -10,7 +10,7 @@ from .validators import Email
 class TokenPayload(Struct):
     """Model for auth token paylod."""
 
-    login: Email
+    login: str
     expiration_data: datetime.datetime
 
     def __post_init__(self) -> None:
