@@ -14,9 +14,9 @@ from src.url.settings import URLSettings
 from src.url.models.routers import ShortenUrlRequest, ShortenUrlResponse
 from src.url.models.urls import URL
 from src.url.containers import URLContainer
-from src.url.services.url_handlers import URLHandler
 
 from .mocks.url_repositories import URLRepositoryMock, URLCacheRepositoryMock
+from .mocks.auth_repositories import UserRepositoryMock, UserCacheRepository
 
 
 @pytest.fixture(scope="function")
@@ -37,6 +37,8 @@ def auth_container():
     settings = AuthSettings()
 
     container.env.from_dict(settings.model_dump())
+    container.user_repository.override(UserRepositoryMock())
+    container.user_cache_repository.override(UserCacheRepository())
     
     return container
 
@@ -77,7 +79,12 @@ def auth_request():
 def auth_request_dict(auth_request: UserAuthRequest):
     return msgspec.to_builtins(auth_request, enc_hook=enc_hook)
     
+
+@pytest.fixture(scope="function")
+def auth_handler(auth_container: AuthContainer):
+    return auth_container.auth_handler()
     
+
 @pytest.fixture(scope="function")
 def url():
     url = URL(

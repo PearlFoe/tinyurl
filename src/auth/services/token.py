@@ -4,7 +4,7 @@ from jose import JWTError, jwt
 
 from pydantic import BaseModel
 
-from ..models.token import TokenData
+from ..models.token import Token
 from ..errors import InvalidTokenError
 
 
@@ -15,7 +15,7 @@ class JWT:
         self._secret = secret
         self._algorithm = algorithm
 
-    def validate(self, token: str, model: BaseModel) -> TokenData:
+    def validate(self, token: str, model: BaseModel) -> Token:
         """
         Validate JWT token and stored payload.
 
