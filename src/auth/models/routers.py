@@ -24,5 +24,5 @@ class UserAuthRequest(Struct):
 class UserAuthResponse(Struct):
     """Login and registration response body model."""
 
-    auth_token: str | None  # TODO: create custom token validator
-    error: str | None
+    auth_token: str | None = None# TODO: create custom token validator
+    error: str | None = None

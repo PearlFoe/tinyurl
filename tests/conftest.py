@@ -7,6 +7,7 @@ from src.main import get_app
 
 from src.auth.settings import AuthSettings
 from src.auth.models.validators import enc_hook
+from src.auth.models.users import User
 from src.auth.models.routers import UserAuthRequest, UserAuthResponse
 from src.auth.containers import AuthContainer
 
@@ -17,6 +18,7 @@ from src.url.containers import URLContainer
 
 from .mocks.url_repositories import URLRepositoryMock, URLCacheRepositoryMock
 from .mocks.auth_repositories import UserRepositoryMock, UserCacheRepository
+from .mocks.password import MockedHash as Hash
 
 
 @pytest.fixture(scope="function")
@@ -39,6 +41,7 @@ def auth_container():
     container.env.from_dict(settings.model_dump())
     container.user_repository.override(UserRepositoryMock())
     container.user_cache_repository.override(UserCacheRepository())
+    container.hash.override(Hash())
     
     return container
 
@@ -66,6 +69,14 @@ async def client(app: Litestar):
     async with AsyncTestClient(app) as client:
         yield client
 
+
+@pytest.fixture(scope="function")
+def user():
+    return User(
+        login="test@gmail.com", 
+        password_hash=Hash.generate("password"),
+        user_id=1,
+    )
 
 @pytest.fixture(scope="function")
 def auth_request():
