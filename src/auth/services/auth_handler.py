@@ -93,8 +93,7 @@ class AuthHandler:
         user = await self._db.get_user(data.login)
         if user:
             return UserRegistrationResponse(
-                status=AuthResponseStatus.ERROR,
-                error=str(ExistingLoginError(login=data.login))
+                status=AuthResponseStatus.ERROR, error=str(ExistingLoginError(login=data.login))
             )
 
         generate_pwd_hash = partial(self._hash.generate, data.password)

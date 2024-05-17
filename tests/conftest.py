@@ -42,15 +42,15 @@ def auth_container():
     container.user_repository.override(UserRepositoryMock())
     container.user_cache_repository.override(UserCacheRepository())
     container.hash.override(Hash())
-    
+
     return container
 
 
 @pytest.fixture(scope="function")
 def containers(
-        auth_container: AuthContainer,
-        url_container: URLContainer,
-    ):
+    auth_container: AuthContainer,
+    url_container: URLContainer,
+):
     return (
         auth_container,
         url_container,
@@ -73,17 +73,15 @@ async def client(app: Litestar):
 @pytest.fixture(scope="function")
 def user():
     return User(
-        login="test@gmail.com", 
+        login="test@gmail.com",
         password_hash=Hash.generate("password"),
         user_id=1,
     )
 
+
 @pytest.fixture(scope="function")
 def login_request():
-    return UserLoginRequest(
-        login="test@gmail.com", 
-        password="password"
-    )
+    return UserLoginRequest(login="test@gmail.com", password="password")
 
 
 @pytest.fixture(scope="function")
@@ -93,10 +91,7 @@ def login_request_dict(login_request: UserLoginRequest):
 
 @pytest.fixture(scope="function")
 def registration_request():
-    return UserRegistrationRequest(
-        login="test@gmail.com", 
-        password="password"
-    )
+    return UserRegistrationRequest(login="test@gmail.com", password="password")
 
 
 @pytest.fixture(scope="function")
@@ -107,7 +102,7 @@ def registration_request_dict(registration_request: UserRegistrationRequest):
 @pytest.fixture(scope="function")
 def auth_handler(auth_container: AuthContainer):
     return auth_container.auth_handler()
-    
+
 
 @pytest.fixture(scope="function")
 def url():
@@ -130,8 +125,8 @@ def url_cache_repository_mock():
 
 @pytest.fixture(scope="function")
 def url_handler(
-        url_container: URLContainer, 
-    ):
+    url_container: URLContainer,
+):
     return url_container.url_handler()
 
 
@@ -142,9 +137,7 @@ def short_url(url: URL):
 
 @pytest.fixture(scope="function")
 def shoten_url_request(url: URL):
-    return ShortenUrlRequest(
-        url=url.long
-    )
+    return ShortenUrlRequest(url=url.long)
 
 
 @pytest.fixture(scope="function")
@@ -154,9 +147,7 @@ def shoten_url_request_dict(shoten_url_request: ShortenUrlRequest):
 
 @pytest.fixture(scope="function")
 def shoten_url_response(short_url: str):
-    return ShortenUrlResponse(
-        url=short_url
-    )
+    return ShortenUrlResponse(url=short_url)
 
 
 @pytest.fixture(scope="function")
