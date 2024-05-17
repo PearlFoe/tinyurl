@@ -18,5 +18,10 @@ def get_container() -> URLContainer:
 
 def get_router() -> Router:
     """Aggregate all routers in /url path."""
-    router = Router(path="/url", route_handlers=[shorten,])
+    router = Router(
+        path="/url",
+        route_handlers=[
+            shorten,
+        ],
+    )
     return router

@@ -17,11 +17,10 @@ from .services.url_handlers import URLHandler
 @post("/shorten", status_code=HTTP_201_CREATED)
 @inject
 async def shorten(
-        request: Request,
-        data: ShortenUrlRequest,
-        url_handler: Annotated[
-            URLHandler, Dependency(skip_validation=True)] = Provide[URLContainer.url_handler],
-    ) -> ShortenUrlResponse:
+    request: Request,
+    data: ShortenUrlRequest,
+    url_handler: Annotated[URLHandler, Dependency(skip_validation=True)] = Provide[URLContainer.url_handler],
+) -> ShortenUrlResponse:
     """
     Make short url from long.
 
@@ -39,10 +38,9 @@ async def shorten(
 @get("/{url_id:str}", status_code=HTTP_303_SEE_OTHER)
 @inject
 async def resolve(
-        url_id: Annotated[URLID, Parameter(pattern=URLID_PATTERN)],
-        url_handler: Annotated[
-            URLHandler, Dependency(skip_validation=True)] = Provide[URLContainer.url_handler],
-    ) -> Redirect:
+    url_id: Annotated[URLID, Parameter(pattern=URLID_PATTERN)],
+    url_handler: Annotated[URLHandler, Dependency(skip_validation=True)] = Provide[URLContainer.url_handler],
+) -> Redirect:
     """
     Redirect from short url to long version.
 

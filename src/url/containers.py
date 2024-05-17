@@ -8,6 +8,7 @@ from .storage.db import URLRepository
 from .storage.cache import URLCacheRepository
 from .storage import utils
 
+
 class URLContainer(containers.DeclarativeContainer):
     """Handle all dependencies for url processing."""
 

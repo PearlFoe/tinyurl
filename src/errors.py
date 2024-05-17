@@ -1,5 +1,6 @@
 """Module for base project errors."""
 
+
 class BaseError(Exception):
     """
     Base error class.

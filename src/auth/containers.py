@@ -8,6 +8,7 @@ from .services.auth_handler import AuthHandler
 from .storage.db import UserRepository
 from .storage.cache import UserCacheRepository
 
+
 class AuthContainer(containers.DeclarativeContainer):
     """Handle all dependencies for user auth."""
 

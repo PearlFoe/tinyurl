@@ -1,4 +1,5 @@
 """Module for project settings models."""
+
 from os import path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -12,7 +13,6 @@ class Settings(BaseSettings):
     cache_dsn: networks.RedisDsn
 
     _project_dir: str = path.join(path.dirname(path.realpath(__file__)), "..")
-
 
     model_config = SettingsConfigDict(
         env_file_encoding="utf-8",

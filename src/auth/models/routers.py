@@ -1,5 +1,6 @@
 """Module for auth request and response models."""
 
+from enum import StrEnum, auto
 from typing import Annotated
 
 from msgspec import Struct, Meta
@@ -7,11 +8,8 @@ from msgspec import Struct, Meta
 from .validators import Email
 
 
-# TODO: create separate login/logout/registration data models
-
-
 class UserAuthRequest(Struct):
-    """Login and registration request body model."""
+    """Base request body model."""
 
     login: str
     password: Annotated[str, Meta(pattern=r".{8,32}$")]
@@ -21,8 +19,37 @@ class UserAuthRequest(Struct):
         self.login = Email(self.login)
 
 
-class UserAuthResponse(Struct):
-    """Login and registration response body model."""
+class UserLoginRequest(UserAuthRequest):
+    """Login request body model."""
 
-    auth_token: str | None = None# TODO: create custom token validator
+
+class UserRegistrationRequest(UserAuthRequest):
+    """Registration request body model."""
+
+
+class AuthResponseStatus(StrEnum):
+    """Possible auth reponses statuses."""
+
+    SUCCESS = auto()
+    ERROR = auto()
+
+
+class UserAuthReponse(Struct):
+    """Base response body model."""
+
+    status: AuthResponseStatus = None
     error: str | None = None
+
+
+class UserLoginResponse(UserAuthReponse):
+    """Login response body model."""
+
+    auth_token: str | None = None  # TODO: create custom token validator
+
+
+class UserRegistrationResponse(UserAuthReponse):
+    """Registration response body model."""
+
+
+class UserLogoutResponse(UserAuthReponse):
+    """Logout response body model."""

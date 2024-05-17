@@ -6,9 +6,9 @@ class TestAuthRouters:
     async def test_login(
             self,
             client: TestClient,
-            auth_request_dict: dict,
+            login_request_dict: dict,
         ):
-        response = await client.post(url="api/v1/auth/login", json=auth_request_dict)
+        response = await client.post(url="api/v1/auth/login", json=login_request_dict)
         assert response.status_code == status_codes.HTTP_200_OK
 
     async def test_login__invalid_request_method(
@@ -31,7 +31,6 @@ class TestAuthRouters:
         ):
         response = await client.get(url="api/v1/auth/logout")
         assert response.status_code == status_codes.HTTP_200_OK
-        assert response.json() == None
 
     async def test_logout__invalid_request_method(
             self,
@@ -43,9 +42,9 @@ class TestAuthRouters:
     async def test_registration(
             self,
             client: TestClient,
-            auth_request_dict: dict,
+            registration_request_dict: dict,
         ):
-        response = await client.post(url="api/v1/auth/regitstration", json=auth_request_dict)
+        response = await client.post(url="api/v1/auth/regitstration", json=registration_request_dict)
         assert response.status_code == status_codes.HTTP_201_CREATED
 
     async def test_registration__invalid_request_method(

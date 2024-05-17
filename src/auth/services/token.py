@@ -25,11 +25,12 @@ class JWT:
             return jwt.decode(
                 token=token,
                 key=self._secret,
-                algorithms=[self._algorithm,],
+                algorithms=[
+                    self._algorithm,
+                ],
             )
         except JWTError as e:
             raise InvalidTokenError from e
-
 
     def generate(self, payload: dict[str, str]) -> str:
         """

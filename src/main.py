@@ -10,10 +10,11 @@ from litestar import Litestar, Router
 from src.url import resolve, get_container as url_get_container, get_router as url_get_router
 from src.auth import get_container as auth_get_container, get_router as auth_get_router
 
+
 class ExtendedLitestar(Litestar):
     """Extended application class for working with DI containers."""
 
-    __slots__ = ("containers", )
+    __slots__ = ("containers",)
 
     def __init__(self, *args: tuple, **kwargs: dict):
         super().__init__(*args, *kwargs)
@@ -27,7 +28,7 @@ def _get_api_router() -> Router:
         route_handlers=[
             auth_get_router(),
             url_get_router(),
-        ]
+        ],
     )
     return router
 

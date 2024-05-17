@@ -1,4 +1,5 @@
 """Module for url processing settings models."""
+
 from src.settings import Settings
 
 

@@ -1,9 +1,11 @@
 """Module for sql query builders."""
+
 import aiosql
 from aiosql.queries import Queries as AiosqlQueries
 from asyncpg import Connection
 
 from src.url.models.urls import URLID
+
 
 class Queries:
     """
@@ -15,7 +17,7 @@ class Queries:
     def __init__(self) -> None:
         self._queries: AiosqlQueries | None = None
 
-    def parse_sql(self, path: str="sql/", driver: str="asyncpg") -> None:
+    def parse_sql(self, path: str = "sql/", driver: str = "asyncpg") -> None:
         """
         Parse queries to be run from .sql files.
 

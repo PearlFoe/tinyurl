@@ -8,18 +8,25 @@ from litestar.status_codes import HTTP_200_OK, HTTP_201_CREATED
 
 from dependency_injector.wiring import inject, Provide
 
+from .models.routers import (
+    UserLoginRequest,
+    UserRegistrationRequest,
+    UserLoginResponse,
+    UserRegistrationResponse,
+    UserLogoutResponse,
+)
 from .containers import AuthContainer
-from .models.routers import UserAuthRequest, UserAuthResponse
 from .services.auth_handler import AuthHandler
 
 
 @post("/login", status_code=HTTP_200_OK)
 @inject
 async def login(
-        data: UserAuthRequest,
-        auth_handler: Annotated[
-           AuthHandler, Dependency(skip_validation=True)] = Provide[AuthContainer.auth_handler],
-    ) -> UserAuthResponse:
+    data: UserLoginRequest,
+    auth_handler: Annotated[AuthHandler, Dependency(skip_validation=True)] = Provide[
+        AuthContainer.auth_handler
+    ],
+) -> UserLoginResponse:
     """
     Login user.
 
@@ -33,9 +40,10 @@ async def login(
 @get("/logout", status_code=HTTP_200_OK)
 @inject
 async def logout(
-        auth_handler: Annotated[
-            AuthHandler, Dependency(skip_validation=True)] = Provide[AuthContainer.auth_handler],
-    ) -> None:
+    auth_handler: Annotated[AuthHandler, Dependency(skip_validation=True)] = Provide[
+        AuthContainer.auth_handler
+    ],
+) -> UserLogoutResponse:
     """
     Logout user.
 
@@ -48,10 +56,11 @@ async def logout(
 @post("/regitstration", status_code=HTTP_201_CREATED)
 @inject
 async def registration(
-        data: UserAuthRequest,
-        auth_handler: Annotated[
-            AuthHandler, Dependency(skip_validation=True)] = Provide[AuthContainer.auth_handler],
-    ) -> UserAuthResponse:
+    data: UserRegistrationRequest,
+    auth_handler: Annotated[AuthHandler, Dependency(skip_validation=True)] = Provide[
+        AuthContainer.auth_handler
+    ],
+) -> UserRegistrationResponse:
     """
     Register new user.
 

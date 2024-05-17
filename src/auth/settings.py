@@ -1,6 +1,5 @@
 """Module for auth settings models."""
 
-
 from src.settings import Settings
 
 

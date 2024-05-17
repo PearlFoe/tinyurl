@@ -1,5 +1,5 @@
 from src.auth.models.validators import Email
-from src.auth.models.routers import UserAuthRequest
+from src.auth.models.routers import UserLoginRequest
 from src.auth.models.users import User
 
 

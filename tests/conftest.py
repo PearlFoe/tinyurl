@@ -8,7 +8,7 @@ from src.main import get_app
 from src.auth.settings import AuthSettings
 from src.auth.models.validators import enc_hook
 from src.auth.models.users import User
-from src.auth.models.routers import UserAuthRequest, UserAuthResponse
+from src.auth.models.routers import UserLoginRequest, UserRegistrationRequest
 from src.auth.containers import AuthContainer
 
 from src.url.settings import URLSettings
@@ -79,17 +79,30 @@ def user():
     )
 
 @pytest.fixture(scope="function")
-def auth_request():
-    return UserAuthRequest(
+def login_request():
+    return UserLoginRequest(
         login="test@gmail.com", 
         password="password"
     )
 
 
 @pytest.fixture(scope="function")
-def auth_request_dict(auth_request: UserAuthRequest):
-    return msgspec.to_builtins(auth_request, enc_hook=enc_hook)
-    
+def login_request_dict(login_request: UserLoginRequest):
+    return msgspec.to_builtins(login_request, enc_hook=enc_hook)
+
+
+@pytest.fixture(scope="function")
+def registration_request():
+    return UserRegistrationRequest(
+        login="test@gmail.com", 
+        password="password"
+    )
+
+
+@pytest.fixture(scope="function")
+def registration_request_dict(registration_request: UserRegistrationRequest):
+    return msgspec.to_builtins(registration_request, enc_hook=enc_hook)
+
 
 @pytest.fixture(scope="function")
 def auth_handler(auth_container: AuthContainer):

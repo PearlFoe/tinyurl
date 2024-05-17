@@ -1,9 +1,8 @@
 """Module for custom types validators."""
+
 from typing import Any
 from email_validator import validate_email, EmailNotValidError, ValidatedEmail
 from msgspec import ValidationError
-
-
 
 
 class Email(str):

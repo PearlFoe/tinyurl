@@ -1,6 +1,8 @@
 """Module for db repositories."""
+
 from ..models.users import User
 from ..models.validators import Email
+
 
 class UserRepository:
     """Repository for user data storing and querying logic."""
