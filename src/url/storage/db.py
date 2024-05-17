@@ -1,4 +1,5 @@
 """Module for db repositories."""
+
 import asyncpg
 
 from ..models.urls import URL, URLID

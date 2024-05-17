@@ -1,4 +1,5 @@
 """Module for caching logic."""
+
 import redis
 
 from ..models.urls import URL, URLID
@@ -8,11 +9,11 @@ class URLCacheRepository:
     """Repository for url cache."""
 
     def __init__(
-            self,
-            pool: redis.asyncio.ConnectionPool,
-            key_prefix: str = "url",
-            default_ttl_sec: float = 60*60*24,
-        ):
+        self,
+        pool: redis.asyncio.ConnectionPool,
+        key_prefix: str = "url",
+        default_ttl_sec: float = 60 * 60 * 24,
+    ):
         self._pool = pool
         self._key_prefix = key_prefix
         self._default_ttl_sec = default_ttl_sec
@@ -49,4 +50,3 @@ class URLCacheRepository:
             return None
 
         return URL(long=long_url, short=short_url_id)
-

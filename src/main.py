@@ -13,7 +13,7 @@ from src.url import resolve, get_container as url_get_container, get_router as u
 class ExtendedLitestar(Litestar):
     """Extended application class for working with DI containers."""
 
-    __slots__ = ("containers", )
+    __slots__ = ("containers",)
 
     def __init__(self, *args: tuple, **kwargs: dict):
         super().__init__(*args, *kwargs)
@@ -26,16 +26,14 @@ def _get_api_router() -> Router:
         path="/api/v1",
         route_handlers=[
             url_get_router(),
-        ]
+        ],
     )
     return router
 
 
 def get_app(containers: tuple[DeclarativeContainer] = ()) -> Litestar:
     """Create main app with all routers included."""
-    containers = containers or (
-        url_get_container(),
-    )
+    containers = containers or (url_get_container(),)
     app = ExtendedLitestar()
     app.containers = containers
 

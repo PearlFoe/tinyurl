@@ -19,11 +19,8 @@ class URL(Struct):
     long: str
     short: Annotated[URLID | None, Meta(pattern=URLID_PATTERN)] = None
 
-    def generate_short_id(self, length: int=URL_ID_LENGTH) -> None:
+    def generate_short_id(self, length: int = URL_ID_LENGTH) -> None:
         """Generate random short url id of porvided length."""
-        symbols = random.choices(
-            ascii_letters + digits,
-            k=length
-        )
+        symbols = random.choices(ascii_letters + digits, k=length)
 
         self.short = "".join(symbols)

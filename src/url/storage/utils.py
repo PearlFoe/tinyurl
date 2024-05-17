@@ -1,4 +1,5 @@
 """Module for store connection utils."""
+
 from typing import AsyncIterator
 
 from pydantic import networks
