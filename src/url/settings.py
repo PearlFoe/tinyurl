@@ -1,4 +1,5 @@
 """Module for project settings models."""
+
 from os import path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict

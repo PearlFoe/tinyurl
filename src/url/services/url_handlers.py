@@ -1,4 +1,5 @@
 """Handlers for url requests."""
+
 from ..models.routers import ShortenUrlRequest
 from ..models.urls import URL, URLID
 from .storage import URLStorage

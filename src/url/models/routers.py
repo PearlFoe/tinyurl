@@ -3,7 +3,6 @@
 from msgspec import Struct
 
 
-
 class ShortenUrlRequest(Struct):
     """Shorten request body model."""
 

@@ -22,7 +22,6 @@ class URLStorage:
         """
         await self._db.save_url(url)
 
-
     async def get_url(self, short_url_id: URLID) -> URL | None:
         """
         Get url data from storage.

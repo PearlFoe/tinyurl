@@ -27,9 +27,7 @@ def url_container():
 
 @pytest.fixture(scope="function")
 def containers(url_container: URLContainer):
-    return (
-        url_container,
-    )
+    return (url_container,)
 
 
 @pytest.fixture(scope="function")
@@ -65,8 +63,8 @@ def url_cache_repository_mock():
 
 @pytest.fixture(scope="function")
 def url_handler(
-        url_container: URLContainer, 
-    ):
+    url_container: URLContainer,
+):
     return url_container.url_handler()
 
 
@@ -77,9 +75,7 @@ def short_url(url: URL):
 
 @pytest.fixture(scope="function")
 def shoten_url_request(url: URL):
-    return ShortenUrlRequest(
-        url=url.long
-    )
+    return ShortenUrlRequest(url=url.long)
 
 
 @pytest.fixture(scope="function")
@@ -89,9 +85,7 @@ def shoten_url_request_dict(shoten_url_request: ShortenUrlRequest):
 
 @pytest.fixture(scope="function")
 def shoten_url_response(short_url: str):
-    return ShortenUrlResponse(
-        url=short_url
-    )
+    return ShortenUrlResponse(url=short_url)
 
 
 @pytest.fixture(scope="function")
