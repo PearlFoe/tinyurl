@@ -1,6 +1,9 @@
+import datetime
+
 import msgspec
 import pytest
-from litestar import Litestar
+from litestar import Litestar, Request
+from litestar.types.asgi_types import HTTPScope
 from litestar.testing import AsyncTestClient
 
 from src.main import get_app
@@ -8,8 +11,10 @@ from src.main import get_app
 from src.auth.settings import AuthSettings
 from src.auth.models.validators import enc_hook
 from src.auth.models.users import User
+from src.auth.models.token import Token, TokenPayload
 from src.auth.models.routers import UserLoginRequest, UserRegistrationRequest
 from src.auth.containers import AuthContainer
+from src.auth.services.token import JWT
 
 from src.url.settings import URLSettings
 from src.url.models.routers import ShortenUrlRequest, ShortenUrlResponse
@@ -22,11 +27,15 @@ from .mocks.password import MockedHash as Hash
 
 
 @pytest.fixture(scope="function")
-def url_container():
-    container = URLContainer()
-    settings = URLSettings()
+def url_settings():
+    return URLSettings()
 
-    container.env.from_dict(settings.model_dump())
+
+@pytest.fixture(scope="function")
+def url_container(url_settings: URLSettings):
+    container = URLContainer()
+
+    container.env.from_dict(url_settings.model_dump())
     container.db_repository.override(URLRepositoryMock())
     container.cache_repository.override(URLCacheRepositoryMock())
 
@@ -34,11 +43,15 @@ def url_container():
 
 
 @pytest.fixture(scope="function")
-def auth_container():
-    container = AuthContainer()
-    settings = AuthSettings()
+def auth_settings():
+    return AuthSettings()
 
-    container.env.from_dict(settings.model_dump())
+
+@pytest.fixture(scope="function")
+def auth_container(auth_settings: AuthSettings):
+    container = AuthContainer()
+
+    container.env.from_dict(auth_settings.model_dump())
     container.user_repository.override(UserRepositoryMock())
     container.user_cache_repository.override(UserCacheRepository())
     container.hash.override(Hash())
@@ -77,6 +90,48 @@ def user():
         password_hash=Hash.generate("password"),
         user_id=1,
     )
+
+
+@pytest.fixture(scope="function")
+def auth_token(auth_settings: AuthSettings, auth_container: AuthContainer):
+    payload = TokenPayload(
+        login="test@gmail.com",
+        expiration_data=(
+            datetime.datetime.now(datetime.UTC) + datetime.timedelta(seconds=auth_settings.token_ttl_sec)
+        ),
+    )
+    jwt = auth_container.jwt()
+    return Token(
+        body=jwt.generate(msgspec.to_builtins(payload, enc_hook=enc_hook)),
+        payload=payload,
+    )
+
+
+@pytest.fixture(scope="function")
+def empty_request():
+    scope = {
+        "app": None,
+        "asgi": {"spec_version": "2.0", "version": "3.0"},
+        "auth": None,
+        "type": type,
+        "path": "/",
+        "raw_path": "/".encode(),
+        "root_path": "",
+        "scheme": "http",
+        "query_string": "".encode(),
+        "client": ("testclient", 50000),
+        "server": ("testserver", 80),
+        "method": "GET",
+        "http_version": "1.1",
+        "extensions": {"http.response.template": {}},
+        "state": {},
+        "path_params": {},
+        "route_handler": None,
+        "user": None,
+        "session": None,
+        "headers": {},
+    }
+    return Request(scope=HTTPScope(scope))
 
 
 @pytest.fixture(scope="function")

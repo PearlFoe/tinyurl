@@ -1,9 +1,12 @@
 import pytest
+from litestar import Request
 
 from src.auth.services.auth_handler import AuthHandler
+from src.auth.models.token import Token
 from src.auth.models.routers import UserLoginRequest, UserRegistrationRequest, AuthResponseStatus
 from src.auth.models.users import User
 from src.auth.errors import AuthError, ExistingLoginError
+from src.auth.settings import AuthSettings
 
 
 class TestAuthHandler:
@@ -91,3 +94,19 @@ class TestAuthHandler:
 
         assert response_body.status == AuthResponseStatus.ERROR
         assert response_body.error == str(ExistingLoginError(user.login))
+
+    async def test_logout(
+        self,
+        auth_handler: AuthHandler,
+        empty_request: Request,
+        auth_settings: AuthSettings,
+        auth_token: Token,
+    ):
+        auth_handler._cache.db.clear()
+        empty_request.scope["headers"] = {auth_settings.token_header_name: auth_token.normalize()}
+
+        response_body = await auth_handler.logout(empty_request)
+
+        assert f"invalidated_{auth_token.body}" in auth_handler._cache.db
+        assert response_body.status == AuthResponseStatus.SUCCESS
+        assert response_body.error is None

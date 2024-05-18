@@ -1,6 +1,9 @@
 from litestar import status_codes
 from litestar.testing import TestClient
 
+from src.auth.models.token import Token
+from src.auth.settings import AuthSettings
+
 
 class TestAuthRouters:
     async def test_login(
@@ -28,8 +31,12 @@ class TestAuthRouters:
     async def test_logout(
         self,
         client: TestClient,
+        auth_token: Token,
+        auth_settings: AuthSettings,
     ):
-        response = await client.get(url="api/v1/auth/logout")
+        response = await client.get(
+            url="api/v1/auth/logout", headers={auth_settings.token_header_name: auth_token.normalize()}
+        )
         assert response.status_code == status_codes.HTTP_200_OK
 
     async def test_logout__invalid_request_method(

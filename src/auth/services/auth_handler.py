@@ -5,6 +5,7 @@ import datetime
 from functools import partial
 
 import msgspec
+from litestar import Request
 
 from .password import Hash
 from .token import JWT
@@ -16,7 +17,7 @@ from ..models.routers import (
     UserLogoutResponse,
     AuthResponseStatus,
 )
-from ..models.token import TokenPayload
+from ..models.token import TokenPayload, Token
 from ..models.validators import Email, enc_hook
 from ..models.users import User
 from ..storage.db import UserRepository
@@ -34,12 +35,14 @@ class AuthHandler:
         db: UserRepository,
         cache: UserCacheRepository,
         token_ttl_sec: int,
+        token_header_name: str,
     ) -> None:
         self._hash = hash
         self._jwt = jwt
         self._db = db
         self._cache = cache
         self._token_ttl_sec = token_ttl_sec
+        self._token_header_name = token_header_name
 
     def _count_expiration_date(
         self, ttl_sec: int, timezone: datetime.timezone = datetime.UTC
@@ -49,6 +52,22 @@ class AuthHandler:
 
     def _auth_token_payload(self, login: Email) -> TokenPayload:
         return TokenPayload(login=login, expiration_data=self._count_expiration_date(self._token_ttl_sec))
+
+    def _get_auth_token(self, request: Request) -> Token:
+        """
+        Get auth token from auth header.
+
+        :param request: Request object with auth header..
+        :return: Token data.
+        """
+        token_type, token = request.headers[self._token_header_name].split(" ", maxsplit=1)
+        payload = self._jwt.validate(token)
+
+        return Token(
+            body=token,
+            type=token_type,
+            payload=payload,
+        )
 
     async def login(self, data: UserLoginRequest) -> UserLoginResponse:
         """
@@ -111,8 +130,15 @@ class AuthHandler:
             status=AuthResponseStatus.SUCCESS,
         )
 
-    async def logout(self) -> UserLogoutResponse:
-        """Logout user."""
+    async def logout(self, request: Request) -> UserLogoutResponse:
+        """
+        Logout user.
+
+        :param request: Request object with auth header.
+        :return: Response body with logout result.
+        """
+        token = self._get_auth_token(request)
+        await self._cache.save_invalidated_token(token)
         return UserLogoutResponse(
             status=AuthResponseStatus.SUCCESS,
         )

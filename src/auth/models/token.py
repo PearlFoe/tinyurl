@@ -27,4 +27,4 @@ class Token(Struct):
 
     def normalize(self) -> str:
         """Format token to string."""
-        return f"{self.type}: {self.body}"
+        return f"{self.type} {self.body}"

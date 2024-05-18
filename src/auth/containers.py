@@ -44,4 +44,5 @@ class AuthContainer(containers.DeclarativeContainer):
         db=user_repository,
         cache=user_cache_repository,
         token_ttl_sec=env.token_ttl_sec,
+        token_header_name=env.token_header_name,
     )

@@ -2,7 +2,7 @@
 
 from typing import Annotated
 
-from litestar import get, post
+from litestar import get, post, Request
 from litestar.params import Dependency
 from litestar.status_codes import HTTP_200_OK, HTTP_201_CREATED
 
@@ -40,6 +40,7 @@ async def login(
 @get("/logout", status_code=HTTP_200_OK)
 @inject
 async def logout(
+    request: Request,
     auth_handler: Annotated[AuthHandler, Dependency(skip_validation=True)] = Provide[
         AuthContainer.auth_handler
     ],
@@ -50,7 +51,7 @@ async def logout(
     :param auth_handler: Injected auth request handler.
     :return: Logout status.
     """
-    return await auth_handler.logout()
+    return await auth_handler.logout(request)
 
 
 @post("/regitstration", status_code=HTTP_201_CREATED)
